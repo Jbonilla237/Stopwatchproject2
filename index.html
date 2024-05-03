@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch Project 2 Javascript 302</title>
+    <style>
+        body {
+            background-color: pink;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 2px solid white;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: white;
+            text-align: center;
+        }
+
+        .timerDisplay {
+            font-size: 24px;
+            color: hotpink;
+            text-shadow: 0 0 5px #ff00ff, 0 0 10px #ff00ff, 0 0 15px #ff00ff, 0 0 20px #ff00ff, 0 0 25px #ff00ff, 0 0 30px #ff00ff, 0 0 35px #ff00ff;
+        }
+
+        button {
+            background-color: pink;
+            color: hotpink;
+            border: 2px solid hotpink;
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: hotpink;
+            color: pink;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="timerDisplay"></div>
+        <button id="startTimer">Start</button>
+        <button id="pauseTimer">Pause</button>
+        <button id="resetTimer">Reset</button>
+    </div>
+
+    <script>
+        let [milliseconds, seconds, minutes, hours] = [0, 0, 0, 0];
+        let timerRef = document.querySelector('.timerDisplay');
+        let int = null;
+
+        document.getElementById('startTimer').addEventListener('click', () => {
+            if (int !== null) {
+                clearInterval(int);
+            }
+            int = setInterval(displayTimer, 10);
+        });
+
+        document.getElementById('pauseTimer').addEventListener('click', () => {
+            clearInterval(int);
+        });
+
+        document.getElementById('resetTimer').addEventListener('click', () => {
+            clearInterval(int);
+            [milliseconds, seconds, minutes, hours] = [0, 0, 0, 0];
+            timerRef.innerHTML = '00 : 00 : 00 : 000';
+        });
+
+        function displayTimer() {
+            milliseconds += 10;
+            if (milliseconds == 1000) {
+                milliseconds = 0;
+                seconds++;
+                if (seconds == 60) {
+                    seconds = 0;
+                    minutes++;
+                    if (minutes == 60) {
+                        minutes = 0;
+                        hours++;
+                    }
+                }
+            }
+
+            let h = hours < 10 ? "0" + hours : hours;
+            let m = minutes < 10 ? "0" + minutes : minutes;
+            let s = seconds < 10 ? "0" + seconds : seconds;
+            let ms = milliseconds < 10 ? "00" + milliseconds : milliseconds < 100 ? "0" + milliseconds : milliseconds;
+
+            timerRef.innerHTML = `${h} : ${m} : ${s} : ${ms}`;
+        }
+    </script>
+</body>
+</html>
